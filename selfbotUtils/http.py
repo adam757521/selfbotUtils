@@ -94,6 +94,46 @@ class HTTPClient:
 
         return kwargs
 
+    @staticmethod
+    async def _handle_server_response(r, response, current_tries):
+        # Check if we have rate limit information
+        remaining = r.headers.get("X-Ratelimit-Remaining")
+        if remaining == "0" and r.status != 429:
+            delta = utils.get_ratelimit_time(r)
+            log.debug("Auth ratelimit has been hit (retry: %s).", delta)
+            await asyncio.sleep(delta)
+
+        # Rate limited
+        if r.status == 429:
+            if not r.headers.get("Via"):
+                # Banned by Cloudflare more than likely
+                raise HTTPException(r, response)
+
+            retry_after = response["retry_after"] / 1000.0
+            log.warning(
+                'We are being rate limited. Retrying in %.2f seconds. Handled under the bucket "None"',
+                retry_after,
+            )
+            await asyncio.sleep(retry_after)
+            return
+
+        # Unconditional retry
+        if r.status in {500, 502}:
+            await asyncio.sleep(1 + current_tries * 2)
+            return
+
+        # Usual error cases
+        if r.status == 403:
+            raise Forbidden(r, response)
+
+        if r.status == 404:
+            raise NotFound(r, response)
+
+        if r.status == 503:
+            raise DiscordServerError(r, response)
+
+        raise HTTPException(r, response)
+
     async def request(self, method: str, url: str, **kwargs) -> Union[dict, str]:
         """
         |coro|
@@ -126,46 +166,12 @@ class HTTPClient:
 
                     data = await json_or_text(r)
 
-                    # Check if we have rate limit information
-                    remaining = r.headers.get("X-Ratelimit-Remaining")
-                    if remaining == "0" and r.status != 429:
-                        delta = utils.get_ratelimit_time(r)
-                        log.debug("Auth ratelimit has been hit (retry: %s).", delta)
-                        await asyncio.sleep(delta)
-
                     # Request was successful so just return the text/json
                     if 300 > r.status >= 200:
                         log.debug("%s %s has received %s", method, url, data)
                         return data
 
-                    # Rate limited
-                    if r.status == 429:
-                        if not r.headers.get("Via"):
-                            # Banned by Cloudflare more than likely
-                            raise HTTPException(r, data)
-
-                        retry_after = data["retry_after"] / 1000.0
-                        log.warning(
-                            'We are being rate limited. Retrying in %.2f seconds. Handled under the bucket "None"',
-                            retry_after,
-                        )
-                        await asyncio.sleep(retry_after)
-                        continue
-
-                    # Unconditional retry
-                    if r.status in {500, 502}:
-                        await asyncio.sleep(1 + tries * 2)
-                        continue
-
-                    # Usual error cases
-                    if r.status == 403:
-                        raise Forbidden(r, data)
-                    elif r.status == 404:
-                        raise NotFound(r, data)
-                    elif r.status == 503:
-                        raise DiscordServerError(r, data)
-                    else:
-                        raise HTTPException(r, data)
+                    await self._handle_server_response(r, data, tries)
 
             # This is handling exceptions from the request
             except OSError as e:
