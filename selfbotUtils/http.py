@@ -36,9 +36,13 @@ class HTTPClient:
         if self._initialized:
             return
 
-        self.user_agent = ua = await utils.get_user_agent(self.session, self.use_default_values)
+        self.user_agent = ua = await utils.get_user_agent(
+            self.session, self.use_default_values
+        )
         self.client_build_number = bn = await utils.get_build_number(self.session)
-        self.browser_version = bv = await utils.get_browser_version(self.session, self.use_default_values)
+        self.browser_version = bv = await utils.get_browser_version(
+            self.session, self.use_default_values
+        )
         self.super_properties = super_properties = {
             "os": "Windows",
             "browser": "Chrome",
@@ -233,7 +237,12 @@ class HTTPClient:
             f"/invites/{invite_code}?inputValue={invite_code}&with_counts=true&with_expiration=true",
         )
 
-    async def redeem_code(self, gift_code: str, payment_source_id: Optional[Union[str, int]] = None) -> dict:
+    async def get_me(self) -> dict:
+        return await self.request("GET", "/users/@me", auth=True)
+
+    async def redeem_code(
+        self, gift_code: str, payment_source_id: Optional[Union[str, int]] = None
+    ) -> dict:
         """
         |coro|
 
