@@ -6,13 +6,13 @@ import re
 
 
 client = discord.Client()  # Used a client, because we do not need any commands.
-LINKS = ('discord.gift', 'discordapp.com/gifts', 'discord.com/gifts')
+LINKS = ("discord.gift", "discordapp.com/gifts", "discord.com/gifts")
 GIFT_RE = re.compile(fr'({"|".join(LINKS)})/\w{{16,24}}')
 
 
 def remove_links(text: str) -> str:
     for link in LINKS:
-        text = text.replace(link + '/', '')
+        text = text.replace(link + "/", "")
 
     return text
 

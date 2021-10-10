@@ -10,9 +10,10 @@ async def main():
     # discord.Guild(state=discord_client._connection, data=guild)
     # selfbotUtils does not have client states!
 
-    for guild in await client.get_discoverable_guilds(10):
+    counter = 0
+    for guild in await client.get_discoverable_guilds(100):
         try:
-            # Please do not do this with a lot of guilds! Your account WILL be phonebanned.
+            # Please do not join a lot of guilds in a short period of time, your account WILL be phonebanned!
             # There is no way of avoiding this, except proxies.
             # Incase you really want to do this for some reason, you should take breaks between joining guilds.
             # For example, join 10 guilds -> wait an hour, continue, etc...
@@ -20,7 +21,18 @@ async def main():
 
             # You can fetch the invite using client.get_invite(invite_code).
             await client.join_invite(guild["vanity_url_code"])
-        except HTTPException:
+            print(f"Joined {guild['name']}")
+            counter += 1
+
+            if counter % 10 == 0:
+                print("Joined 10 guilds, sleeping for an hour.")
+                await asyncio.sleep(60 * 60)
+
+        except HTTPException as e:
+            if e.code == 40002:  # NOT_VERIFIED
+                print("We have been phonebanned...")
+                break
+
             print("ignoring", guild["vanity_url_code"], "error while joining")
 
     # Another good way of joining a lot of guilds is making an "invite sniper", pretty similar to a nitro sniper,
