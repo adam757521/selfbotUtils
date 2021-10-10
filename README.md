@@ -5,7 +5,7 @@
   <a href="https://pepy.tech/project/selfbotUtils"><img src="https://img.shields.io/pypi/dm/selfbotUtils?color=green&style=flat-square" /></a>
   <a href="https://pypi.org/project/selfbotUtils/"><img src="https://img.shields.io/pypi/v/selfbotUtils?style=flat-square" /></a>
   <a href=""><img src="https://img.shields.io/pypi/l/selfbotUtils?style=flat-square" /></a>
-  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square">
+  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square"></a>
 </p>
 
 <p align="center">
