@@ -15,14 +15,12 @@
 Features
 -------------
 
-- Very easy to use and user friendly.
+- Very easy to use and user-friendly.
 - Join invites, redeem nitro codes, without being phonebanned!
 (MORE COMING SOON!)
 
 Installation
 --------------
-
-selfbotUtils has not been released to PyPi yet.
 
 Installing selfbotUtils is very easy.  
 
