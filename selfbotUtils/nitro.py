@@ -24,6 +24,8 @@ SOFTWARE.
 
 from __future__ import annotations
 
+from typing import Optional
+
 from .enums import NitroServerResponse
 
 __all__ = ("NitroResponse",)
@@ -44,6 +46,20 @@ class NitroResponse:
 
     def __str__(self):
         return f"<{self.__class__.__name__} response={self.server_response}>"
+
+    @property
+    def nitro_type(self) -> Optional[str]:
+        """
+        Returns the nitro type of the claim, if applicable.
+
+        :return: The nitro type, if applicable.
+        :rtype: Optional[str]
+        """
+
+        if self.server_response != NitroServerResponse.CLAIMED:
+            return None
+
+        return self.raw["subscription_plan"]["name"]
 
     @classmethod
     def from_response(cls, response: dict) -> NitroResponse:

@@ -9,6 +9,7 @@ A python module that makes selfbot creation extremely easy, without risking your
 
 from .http import HTTPClient
 from .client import Client
+from .enums import NitroServerResponse
 
 __title__ = "selfbotUtils"
 __author__ = "adam7100"
