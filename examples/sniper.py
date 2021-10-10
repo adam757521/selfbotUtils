@@ -56,5 +56,8 @@ async def on_message(message):
 
 # If you are using discord.py-self, make sure you remove the bot argument!
 token = "token"
-client.selfbot = selfbotUtils.Client()
+client.selfbot = selfbotUtils.Client(state=client._connection)
+# You should always pass the state, if you are sure you will use a discord client.
+# Passing the client connection state helps in the guild/invite fetching progress.
+
 client.run(token)
