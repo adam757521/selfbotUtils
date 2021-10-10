@@ -25,10 +25,12 @@ SOFTWARE.
 from __future__ import annotations
 
 import asyncio
-from typing import Optional
+from typing import Optional, List
 
 import discord
+import discord.state
 
+from .exceptions import InvalidLimit
 from .http import HTTPClient, HTTPException, json_or_text
 from .nitro import NitroResponse
 
@@ -40,10 +42,15 @@ class Client:
     Represents a selfbot client.
     """
 
-    __slots__ = ("loop", "http")
+    __slots__ = ("loop", "http", "state")
 
-    def __init__(self, loop: asyncio.AbstractEventLoop = None) -> None:
+    def __init__(
+        self,
+        loop: asyncio.AbstractEventLoop = None,
+        state: discord.state.ConnectionState = None,
+    ) -> None:
         self.loop = loop or asyncio.get_event_loop()
+        self.state = state
         self.http = None
 
     async def run(self, token: str) -> None:
@@ -81,6 +88,43 @@ class Client:
 
         await self.http.close()
 
+    async def get_discoverable_guilds(self, limit: int = 48) -> List[dict]:
+        """
+        |coro|
+
+        Returns the discoverable guilds.
+
+        :param int limit: The fetch limit.
+        :return: The discoverable guilds.
+        :rtype: List[dict]
+        """
+
+        if limit < 0:
+            raise InvalidLimit(f"Limit {limit} is invalid.")
+
+        if limit <= 48:
+            return (await self.http.get_discoverable_guilds(0, limit))["guilds"]
+
+        initial_fetch = await self.http.get_discoverable_guilds(0, 48)
+        total_guilds = initial_fetch["total"]
+
+        guilds = []
+        fetches = list(
+            await asyncio.gather(
+                *[
+                    self.http.get_discoverable_guilds(offset, min(limit - offset, 48))
+                    for offset in range(48, min(limit, total_guilds), 48)
+                ]
+            )
+        )
+
+        fetches.insert(0, initial_fetch)
+
+        for fetch in fetches:
+            guilds += fetch.get("guilds")
+
+        return guilds
+
     async def get_invite(self, invite_code: str) -> Optional[discord.Invite]:
         """
         |coro|
@@ -94,7 +138,7 @@ class Client:
 
         try:
             return discord.Invite(
-                state=None, data=await self.http.get_invite(invite_code)
+                state=self.state, data=await self.http.get_invite(invite_code)
             )
         except AttributeError:
             return
@@ -112,7 +156,7 @@ class Client:
 
         try:
             return discord.Invite(
-                state=None, data=await self.http.join_invite(invite_code)
+                state=self.state, data=await self.http.join_invite(invite_code)
             )
         except AttributeError:
             return

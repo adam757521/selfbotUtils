@@ -10,8 +10,8 @@ A python module that makes selfbot creation extremely easy, without risking your
 from .http import HTTPClient
 from .client import Client
 
-__title__ = 'selfbotUtils'
-__author__ = 'adam7100'
-__license__ = 'MIT'
-__copyright__ = 'Copyright 2021-present adam7100'
-__version__ = '0.0.1'
+__title__ = "selfbotUtils"
+__author__ = "adam7100"
+__license__ = "MIT"
+__copyright__ = "Copyright 2021-present adam7100"
+__version__ = "0.0.1"

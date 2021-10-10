@@ -1,15 +1,30 @@
 import selfbotUtils
+from selfbotUtils.http import HTTPException
 import asyncio
 
 
 async def main():
     await client.run("token")
 
-    print(repr(await client.http.get_invite("invite_code")))
+    # You can of course fetch these payloads, by using discord client states.
+    # discord.Guild(state=discord_client._connection, data=guild)
+    # selfbotUtils does not have client states!
 
-    print(
-        await client.join_invite("invite_code")
-    )  # Joins an invite without phonebanning.
+    for guild in await client.get_discoverable_guilds(10):
+        try:
+            # Please do not do this with a lot of guilds! Your account WILL be phonebanned.
+            # There is no way of avoiding this, except proxies.
+            # Incase you really want to do this for some reason, you should take breaks between joining guilds.
+            # For example, join 10 guilds -> wait an hour, continue, etc...
+            # That method will lower the chances of phonebanning, but, still risky.
+
+            # You can fetch the invite using client.get_invite(invite_code).
+            await client.join_invite(guild["vanity_url_code"])
+        except HTTPException:
+            print("ignoring", guild["vanity_url_code"], "error while joining")
+
+    # Another good way of joining a lot of guilds is making an "invite sniper", pretty similar to a nitro sniper,
+    # but instead of sniping gifts, it snipes invites. (you will still need to make a cooldown/sleep system, of course)
 
     await client.close()
 

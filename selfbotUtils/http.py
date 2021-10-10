@@ -261,6 +261,22 @@ class HTTPClient:
             f"/invites/{invite_code}?inputValue={invite_code}&with_counts=true&with_expiration=true",
         )
 
+    async def get_discoverable_guilds(self, offset: int = 0, limit: int = 48) -> dict:
+        """
+        |coro|
+
+        Returns the discoverable guilds.
+
+        :param int offset: The offset.
+        :param int limit: The fetch limit, max is 48.
+        :return: The fetch data.
+        :rtype: dict
+        """
+
+        return await self.request(
+            "GET", f"/discoverable-guilds?offset={offset}&limit={limit}", auth=True
+        )
+
     async def get_me(self) -> dict:
         """
         |coro|
