@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Optional
 
-from discord import LoginFailure
+import discord
 
 from .http import HTTPClient, HTTPException, json_or_text
 from .nitro import NitroResponse
@@ -40,7 +41,7 @@ class Client:
             await self.http.close()
 
             if e.status == 401:
-                raise LoginFailure("Improper token has been passed.")
+                raise discord.LoginFailure("Improper token has been passed.")
 
             raise
 
@@ -55,6 +56,42 @@ class Client:
         """
 
         await self.http.close()
+
+    async def get_invite(self, invite_code: str) -> Optional[discord.Invite]:
+        """
+        |coro|
+
+        Gets the invite information.
+
+        :param str invite_code: The invite code.
+        :return: The invite information.
+        :rtype: discord.Invite
+        """
+
+        try:
+            return discord.Invite(
+                state=None, data=await self.http.get_invite(invite_code)
+            )
+        except AttributeError:
+            return
+
+    async def join_invite(self, invite_code: str) -> Optional[discord.Invite]:
+        """
+        |coro|
+
+        Joins an invite.
+
+        :param str invite_code: The invite code.
+        :return: The invite information.
+        :rtype: discord.Invite
+        """
+
+        try:
+            return discord.Invite(
+                state=None, data=await self.http.join_invite(invite_code)
+            )
+        except AttributeError:
+            return
 
     async def redeem_gift(
         self, gift_code: str, payment_source_id: int = None

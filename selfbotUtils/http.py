@@ -238,6 +238,15 @@ class HTTPClient:
         )
 
     async def get_me(self) -> dict:
+        """
+        |coro|
+
+        Returns the token information.
+
+        :return: The token information.
+        :rtype: dict
+        """
+
         return await self.request("GET", "/users/@me", auth=True)
 
     async def redeem_code(
