@@ -57,7 +57,7 @@ class NitroResponse:
         """
 
         if self.server_response != NitroServerResponse.CLAIMED:
-            return None
+            return
 
         return self.raw["subscription_plan"]["name"]
 
