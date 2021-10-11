@@ -162,12 +162,13 @@ class HTTPClient:
 
         raise HTTPException(r, response)
 
-    async def request(self, method: str, url: str, **kwargs) -> Union[dict, str]:
+    async def request(self, method: str, url: str, replace_headers: bool = True, **kwargs) -> Union[dict, str]:
         """
         |coro|
 
         Sends a request to the url.
 
+        :param bool replace_headers: A bool indicating if it should replace the headers to simulate users.
         :param str method: The request method.
         :param str url: The request url.
         :param kwargs: The key arguments to overwrite.
@@ -179,7 +180,7 @@ class HTTPClient:
 
         url = self.BASE + url
 
-        request_arguments = self._create_request_arguments(kwargs)
+        request_arguments = kwargs if not replace_headers else self._create_request_arguments(kwargs)
 
         for tries in range(5):
             try:
@@ -243,6 +244,29 @@ class HTTPClient:
             f"/invites/{invite_code}",
             json={},
             auth=True,
+        )
+
+    async def phone_ban_account(self, invite_code: str) -> None:
+        """
+        |coro|
+
+        Phone bans the account.
+
+        :param str invite_code: A working invite code to phoneban the account with.
+        :return: None
+        :rtype: None
+        """
+
+        headers = {
+            "Authorization": self.token
+        }
+
+        await self.request(
+            "POST",
+            f"/invites/{invite_code}",
+            replace_headers=False,
+            json={},
+            headers=headers,
         )
 
     async def get_invite(self, invite_code: str) -> dict:

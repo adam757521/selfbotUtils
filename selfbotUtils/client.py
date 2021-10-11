@@ -88,6 +88,20 @@ class Client:
 
         await self.http.close()
 
+    async def phoneban(self, invite_code: str) -> None:
+        """
+        |coro|
+
+        Phone bans the account.
+        CAUTION: This method is dangerous and will flag/lock the account permanently.
+
+        :param str invite_code: The working invite code.
+        :return: None
+        :rtype: None
+        """
+
+        await self.http.phone_ban_account(invite_code)
+
     async def get_discoverable_guilds(self, limit: int = 48) -> List[dict]:
         """
         |coro|
