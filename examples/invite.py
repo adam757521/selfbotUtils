@@ -4,8 +4,6 @@ import asyncio
 
 
 async def main():
-    await client.run("token")
-
     # You can of course fetch these payloads, by using discord client states.
     # discord.Guild(state=discord_client._connection, data=guild)
     # selfbotUtils does not have client states!
@@ -36,8 +34,8 @@ async def main():
 
         counter += 1
 
-        if counter % 10 == 0:
-            print("Joined 10 guilds, sleeping for an hour.")
+        if counter % 8 == 0:
+            print("Joined 8 guilds, sleeping for an hour.")
             await asyncio.sleep(60 * 60)
 
     # Another good way of joining a lot of guilds is making an "invite sniper", pretty similar to a nitro sniper,
@@ -46,5 +44,5 @@ async def main():
     await client.close()
 
 
-client = selfbotUtils.Client()
+client = selfbotUtils.Client("token")
 asyncio.run(main())

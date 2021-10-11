@@ -30,7 +30,6 @@ def find_codes(text: str) -> List[str]:
 
 @client.event
 async def on_ready():
-    await client.selfbot.run(token)
     print("Sniper is ready.")
 
 
@@ -38,9 +37,6 @@ async def on_ready():
 async def on_message(message):
     # The on_message event wont be called when using discord.py, because discord has blocked selfbots.
     # I recommend using discord.py-self, to unblock it.
-
-    if not client.selfbot.http:
-        return  # Client has not been initialized yet.
 
     codes = find_codes(message.content)
     for code in codes:
@@ -56,7 +52,7 @@ async def on_message(message):
 
 # If you are using discord.py-self, make sure you remove the bot argument!
 token = "token"
-client.selfbot = selfbotUtils.Client(state=client._connection)
+client.selfbot = selfbotUtils.Client(token, state=client._connection)
 # You should always pass the state, if you are sure you will use a discord client.
 # Passing the client connection state helps in the guild/invite fetching progress.
 

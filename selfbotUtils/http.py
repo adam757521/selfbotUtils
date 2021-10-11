@@ -28,6 +28,7 @@ import logging
 from base64 import b64encode
 from typing import Union, Optional
 
+import discord
 from discord.errors import HTTPException, Forbidden, NotFound, DiscordServerError
 from discord.http import json_or_text
 
@@ -122,8 +123,7 @@ class HTTPClient:
 
         return kwargs
 
-    @staticmethod
-    async def _handle_server_response(r, response, current_tries):
+    async def _handle_server_response(self, r, response, current_tries):
         # Check if we have rate limit information
         remaining = r.headers.get("X-Ratelimit-Remaining")
         if remaining == "0" and r.status != 429:
@@ -151,6 +151,10 @@ class HTTPClient:
             return
 
         # Usual error cases
+        if r.status == 401:
+            await self.close()
+            raise discord.LoginFailure("An improper token has been passed")
+
         if r.status == 403:
             raise Forbidden(r, response)
 

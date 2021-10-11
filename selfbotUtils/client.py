@@ -46,35 +46,13 @@ class Client:
 
     def __init__(
         self,
+        token: str,
         loop: asyncio.AbstractEventLoop = None,
         state: discord.state.ConnectionState = None,
     ) -> None:
         self.loop = loop or asyncio.get_event_loop()
         self.state = state
-        self.http = None
-
-    async def run(self, token: str) -> None:
-        """
-        |coro|
-
-        Runs the bot with the token.
-
-        :param str token: The token.
-        :return: None
-        :rtype: None
-        """
-
         self.http = HTTPClient(token)
-
-        try:
-            await self.http.get_me()
-        except HTTPException as e:
-            await self.http.close()
-
-            if e.status == 401:
-                raise discord.LoginFailure("Improper token has been passed.")
-
-            raise
 
     async def close(self) -> None:
         """
