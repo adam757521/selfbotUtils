@@ -38,7 +38,7 @@ Known Issues
 
 - None.
 
-Support
---------------
+Disclaimer
+----------
 
-Nothing here yet.
+Automating user accounts is against the Discord ToS. This library is a proof of concept. Use at your own risk.
