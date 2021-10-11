@@ -166,7 +166,9 @@ class HTTPClient:
 
         raise HTTPException(r, response)
 
-    async def request(self, method: str, url: str, replace_headers: bool = True, **kwargs) -> Union[dict, str]:
+    async def request(
+        self, method: str, url: str, replace_headers: bool = True, **kwargs
+    ) -> Union[dict, str]:
         """
         |coro|
 
@@ -184,7 +186,9 @@ class HTTPClient:
 
         url = self.BASE + url
 
-        request_arguments = kwargs if not replace_headers else self._create_request_arguments(kwargs)
+        request_arguments = (
+            kwargs if not replace_headers else self._create_request_arguments(kwargs)
+        )
 
         for tries in range(5):
             try:
@@ -250,6 +254,28 @@ class HTTPClient:
             auth=True,
         )
 
+    async def accept_membership_screening(self, guild_id: int) -> None:
+        """
+        |coro|
+
+        Accepts the membership screening in the guild.
+
+        :param int guild_id: The guild id.
+        :return: None
+        :rtype: None
+        """
+
+        screening_fields = await self.request(
+            "GET", f"/guilds/{guild_id}/member-verification?with_guild=false", auth=True
+        )
+
+        screening_fields.pop("description")  # Not needed in payload.
+        screening_fields["form_fields"][0]["response"] = True
+
+        await self.request(
+            "PUT", f"/guilds/{guild_id}/requests/@me", auth=True, json=screening_fields
+        )
+
     async def phone_ban_account(self, invite_code: str) -> None:
         """
         |coro|
@@ -261,9 +287,7 @@ class HTTPClient:
         :rtype: None
         """
 
-        headers = {
-            "Authorization": self.token
-        }
+        headers = {"Authorization": self.token}
 
         await self.request(
             "POST",

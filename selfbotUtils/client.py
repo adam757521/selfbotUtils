@@ -80,6 +80,19 @@ class Client:
 
         await self.http.phone_ban_account(invite_code)
 
+    async def accept_membership_screening(self, guild_id: int) -> None:
+        """
+        |coro|
+
+        Accepts the membership screening.
+
+        :param int guild_id: The guild id.
+        :return: None
+        :rtype: None
+        """
+
+        await self.http.accept_membership_screening(guild_id)
+
     async def get_discoverable_guilds(self, limit: int = 48) -> List[dict]:
         """
         |coro|
@@ -135,21 +148,28 @@ class Client:
         except AttributeError:
             return
 
-    async def join_invite(self, invite_code: str) -> Optional[discord.Invite]:
+    async def join_invite(
+        self, invite_code: str, accept_membership_screening: bool = False
+    ) -> Optional[discord.Invite]:
         """
         |coro|
 
         Joins an invite.
 
+        :param bool accept_membership_screening:
+            Indicating if the join should accept the membership screening automatically.
         :param str invite_code: The invite code.
         :return: The invite information.
         :rtype: discord.Invite
         """
 
         try:
-            return discord.Invite(
-                state=self.state, data=await self.http.join_invite(invite_code)
-            )
+            invite_data = await self.http.join_invite(invite_code)
+
+            if accept_membership_screening:
+                await self.accept_membership_screening(invite_data["guild"]["id"])
+
+            return discord.Invite(state=self.state, data=invite_data)
         except AttributeError:
             return
 
