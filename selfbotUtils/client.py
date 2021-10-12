@@ -173,6 +173,19 @@ class Client:
         except AttributeError:
             return
 
+    async def send_friend_request(self, tag: str) -> dict:
+        """
+        |coro|
+
+        Sends a friend request to the user.
+
+        :param str tag: The user tag (username#discriminator)
+        :return: The server response.
+        :rtype: dict
+        """
+
+        return await self.http.send_friend_request(*tag.split('#')[:2])
+
     async def redeem_gift(
         self, gift_code: str, payment_source_id: int = None
     ) -> NitroResponse:

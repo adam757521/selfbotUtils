@@ -236,6 +236,28 @@ class HTTPClient:
         if self.session:
             await self.session.close()
 
+    async def send_friend_request(self, username: str, discriminator: int) -> dict:
+        """
+        |coro|
+
+        Sends a friend request to the user.
+
+        :param str username: The username.
+        :param int discriminator: The discriminator.
+        :return: The server response.
+        :rtype: dict
+        """
+
+        return await self.request(
+            "POST",
+            "/users/@me/relationships",
+            json={
+                "username": username,
+                "discriminator": discriminator
+            },
+            auth=True
+        )
+
     async def join_invite(self, invite_code: str) -> dict:
         """
         |coro|
