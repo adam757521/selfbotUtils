@@ -26,7 +26,13 @@ from __future__ import annotations
 
 from enum import Enum
 
-__all__ = ("NitroServerResponse",)
+__all__ = ("NitroServerResponse", "HypeSquad")
+
+
+class HypeSquad(Enum):
+    BRAVERY = 1
+    BRILLIANCE = 2
+    BALANCE = 3
 
 
 class NitroServerResponse(Enum):

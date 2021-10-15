@@ -9,8 +9,9 @@ A python module that makes selfbot creation extremely easy, without risking your
 
 from .http import HTTPClient
 from .client import Client
-from .enums import NitroServerResponse
+from .enums import NitroServerResponse, HypeSquad
 from .puller import TokenPuller
+from .nitro import NitroResponse
 
 __title__ = "selfbotUtils"
 __author__ = "adam7100"

@@ -30,6 +30,7 @@ from typing import Optional, List
 import discord
 import discord.state
 
+from .enums import HypeSquad
 from .exceptions import InvalidLimit
 from .http import HTTPClient, HTTPException, json_or_text
 from .nitro import NitroResponse
@@ -65,6 +66,19 @@ class Client:
         """
 
         await self.http.close()
+
+    async def set_hypesquad(self, hypesquad: HypeSquad) -> None:
+        """
+        |coro|
+
+        Sets the hypesquad house of the account.
+
+        :param HypeSquad hypesquad: The hypesquad to set.
+        :return: None
+        :rtype: None
+        """
+
+        await self.http.set_hypesquad(hypesquad.value)
 
     async def phoneban(self, invite_code: str) -> None:
         """

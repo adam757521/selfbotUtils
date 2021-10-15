@@ -255,6 +255,24 @@ class HTTPClient:
             auth=True,
         )
 
+    async def set_hypesquad(self, hypesquad_value: int) -> dict:
+        """
+        |coro|
+
+        Sets the hypesquad value.
+
+        :param int hypesquad_value: The hypesquad value.
+        :return: The server response.
+        :rtype: dict
+        """
+
+        return await self.request(
+            "POST",
+            "/hypesquad/online",
+            json={"house_id": hypesquad_value},
+            auth=True,
+        )
+
     async def join_invite(self, invite_code: str) -> dict:
         """
         |coro|
