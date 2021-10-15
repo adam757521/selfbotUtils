@@ -8,7 +8,7 @@ setup(
     packages=["selfbotUtils"],
     package_data={},
     include_package_data=True,
-    version="0.0.1",
+    version="0.0.2",
     license="MIT",
     description="A python module that makes selfbot creation extremely easy, without risking your account being phonebanned!",
     long_description=README,

@@ -28,10 +28,18 @@ Installing selfbotUtils is very easy.
 python -m pip install selfbotUtils
 ```
 
+Information
+-----------
+What is a phoneban?
+
+A phoneban is basically when discord blocks your account, and makes it not accessable until you verify your email and add a phone number to the account.
+
+selfbotUtils bypasses the discord phoneban detection system by sending custom headers, payloads, etc.
+
 Examples
 --------------
 
-More examples are listed in the examples folder.
+Examples are listed in the examples folder.
 
 Known Issues
 --------------
