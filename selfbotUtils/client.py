@@ -184,7 +184,7 @@ class Client:
         :rtype: dict
         """
 
-        return await self.http.send_friend_request(*tag.split('#')[:2])
+        return await self.http.send_friend_request(*tag.split("#")[:2])
 
     async def redeem_gift(
         self, gift_code: str, payment_source_id: int = None

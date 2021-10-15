@@ -251,11 +251,8 @@ class HTTPClient:
         return await self.request(
             "POST",
             "/users/@me/relationships",
-            json={
-                "username": username,
-                "discriminator": discriminator
-            },
-            auth=True
+            json={"username": username, "discriminator": discriminator},
+            auth=True,
         )
 
     async def join_invite(self, invite_code: str) -> dict:
