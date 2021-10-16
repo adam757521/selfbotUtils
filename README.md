@@ -16,7 +16,8 @@ Features
 -------------
 
 - Very easy to use and user-friendly.
-- Join invites, redeem nitro codes, without being phonebanned!
+- Mimic a discord user, and make API calls without being phonebanned (Join guilds, redeem nitro, etc!)
+- Token puller that support multiple operating systems (Windows, macOS)
 (MORE COMING SOON!)
 
 Installation
