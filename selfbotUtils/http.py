@@ -255,16 +255,23 @@ class HTTPClient:
             auth=True,
         )
 
-    async def set_hypesquad(self, hypesquad_value: int) -> dict:
+    async def set_hypesquad(self, hypesquad_value: Optional[int]) -> dict:
         """
         |coro|
 
         Sets the hypesquad value.
 
-        :param int hypesquad_value: The hypesquad value.
+        :param Optional[int] hypesquad_value: The hypesquad value.
         :return: The server response.
         :rtype: dict
         """
+
+        if not hypesquad_value:
+            return await self.request(
+                "DELETE",
+                "/hypesquad/online",
+                auth=True,
+            )
 
         return await self.request(
             "POST",

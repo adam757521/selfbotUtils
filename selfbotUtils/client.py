@@ -67,7 +67,7 @@ class Client:
 
         await self.http.close()
 
-    async def set_hypesquad(self, hypesquad: HypeSquad) -> None:
+    async def set_hypesquad(self, hypesquad: Optional[HypeSquad]) -> None:
         """
         |coro|
 
@@ -78,7 +78,10 @@ class Client:
         :rtype: None
         """
 
-        await self.http.set_hypesquad(hypesquad.value)
+        if not hypesquad:
+            await self.http.set_hypesquad(None)
+        else:
+            await self.http.set_hypesquad(hypesquad.value)
 
     async def phoneban(self, invite_code: str) -> None:
         """
