@@ -87,6 +87,7 @@ class HTTPClient:
         self.encoded_super_properties = b64encode(
             json.dumps(super_properties).encode()
         ).decode("utf-8")
+        self._initialized = True
 
     def _create_request_arguments(self, kwargs: dict) -> dict:
         headers = {
