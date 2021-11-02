@@ -386,6 +386,19 @@ class HTTPClient:
 
         return await self.request("GET", "/users/@me", auth=True)
 
+    async def leave_guild(self, guild_id: int) -> None:
+        """
+        |coro|
+
+        Leaves the guild.
+
+        :param int guild_id: The guild id.
+        :return: None
+        :rtype: None
+        """
+
+        await self.request("DELETE", f"/users/@me/guilds/{guild_id}", auth=True)
+
     async def redeem_code(
         self, gift_code: str, payment_source_id: Optional[Union[str, int]] = None
     ) -> dict:

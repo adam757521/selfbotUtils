@@ -24,6 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Optional
 
 from .enums import NitroServerResponse
@@ -31,21 +32,14 @@ from .enums import NitroServerResponse
 __all__ = ("NitroResponse",)
 
 
+@dataclass
 class NitroResponse:
     """
     Represents a Nitro response.
     """
 
-    __slots__ = ("server_response", "raw")
-
-    def __init__(
-        self, server_response: NitroServerResponse, raw_response: dict
-    ) -> None:
-        self.server_response = server_response
-        self.raw = raw_response
-
-    def __str__(self):
-        return f"<{self.__class__.__name__} response={self.server_response}>"
+    server_response: NitroServerResponse
+    raw: dict
 
     @property
     def nitro_type(self) -> Optional[str]:

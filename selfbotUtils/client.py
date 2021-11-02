@@ -110,6 +110,19 @@ class Client:
 
         await self.http.accept_membership_screening(guild_id)
 
+    async def leave_guild(self, guild_id: int) -> None:
+        """
+        |coro|
+
+        Leaves the guild.
+
+        :param int guild_id: The guild id.
+        :return: None
+        :rtype: None
+        """
+
+        await self.http.leave_guild(guild_id)
+
     async def get_discoverable_guilds(self, limit: int = 48) -> List[dict]:
         """
         |coro|
