@@ -138,7 +138,7 @@ class HTTPClient:
                 # Banned by Cloudflare more than likely
                 raise HTTPException(r, response)
 
-            retry_after = response["retry_after"] / 1000.0
+            retry_after = response["retry_after"]
             log.warning(
                 'We are being rate limited. Retrying in %.2f seconds. Handled under the bucket "None"',
                 retry_after,
