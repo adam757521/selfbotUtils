@@ -59,7 +59,7 @@ async def get_build_number(session):
         "GET", build_url, headers={"Accept-Encoding": "gzip, deflate"}, timeout=10
     )
     build_file = await build_request.text()
-    build_index = build_file.find("buildNumber") + 14
+    build_index = build_file.find("buildNumber") + 24
     return int(build_file[build_index : build_index + 5])
 
 

@@ -83,6 +83,19 @@ class Client:
         else:
             await self.http.set_hypesquad(hypesquad.value)
 
+    async def create_account(self, p):
+        """
+        |coro|
+
+        Creates an account.
+
+        :param dict p: The parameters.
+        :return: The server response.
+        :rtype: dict
+        """
+
+        return await self.http.create_account(p)
+
     async def phoneban(self, invite_code: str) -> None:
         """
         |coro|

@@ -399,6 +399,25 @@ class HTTPClient:
 
         await self.request("DELETE", f"/users/@me/guilds/{guild_id}", auth=True)
 
+    async def create_account(
+            self, p
+    ):
+        """
+        |coro|
+
+        Creates an account.
+
+        :param str p: The password.
+        :return: The account information.
+        :rtype: dict
+        """
+
+        return await self.request(
+            "POST",
+            "/auth/register",
+            json=p,
+        )
+
     async def redeem_code(
         self, gift_code: str, payment_source_id: Optional[Union[str, int]] = None
     ) -> dict:
