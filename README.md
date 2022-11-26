@@ -9,6 +9,8 @@
 </p>
 
 <p align="center">
+   <b>Discord is now protected by cloudflare invisible. This module is outdated.</b>
+<br>
    A python module that makes selfbot creation extremely easy, without risking your account being phonebanned!
 </p>
 
